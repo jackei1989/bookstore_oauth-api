@@ -27,14 +27,8 @@ type dbRepository struct {
 }
 
 func (r *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.RestErr) {
-	session, err := cassandra.GetSession()
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
 	var result access_token.AccessToken
-	if err := session.Query(QUERYGETACCESSTOKEN, id).Scan(
+	if err := cassandra.GetSession().Query(QUERYGETACCESSTOKEN, id).Scan(
 		&result.AccessToken,
 		&result.UserId,
 		&result.ClientId,
@@ -49,13 +43,7 @@ func (r *dbRepository) GetById(id string) (*access_token.AccessToken, *errors.Re
 }
 
 func (r *dbRepository) Create(token access_token.AccessToken) *errors.RestErr {
-	session, err := cassandra.GetSession()
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	if err := session.Query(QUERYCREATEACCESSTOKEN,
+	if err := cassandra.GetSession().Query(QUERYCREATEACCESSTOKEN,
 		token.AccessToken,
 		token.UserId, token.ClientId,
 		token.Expires,
@@ -66,13 +54,7 @@ func (r *dbRepository) Create(token access_token.AccessToken) *errors.RestErr {
 }
 
 func (r *dbRepository) UpdateExpirationTime(token access_token.AccessToken) *errors.RestErr {
-	session, err := cassandra.GetSession()
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
-	if err := session.Query(QUERYUPDATEEXPIRES,
+	if err := cassandra.GetSession().Query(QUERYUPDATEEXPIRES,
 		token.Expires,
 		token.AccessToken,
 	).Exec(); err != nil {
