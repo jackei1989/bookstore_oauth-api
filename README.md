@@ -3,7 +3,7 @@
 [//]: # (**Gin** Web Framework)
 
 [//]: # ()
-[//]: # (**MYSQL** Database)
+**Cassandra** Database
 
 [//]: # (**DAO** and **DTO** Design Patterns)
 
